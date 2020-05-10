@@ -1,9 +1,10 @@
 const express = require('express')
 const bodyParser = require('body-parser')
+const passport = require('passport')
 
 const authRoutes = require('./routes/auth')
 const analyticsRoutes = require('./routes/auth')
-const categoryRoutes = require('./routes/auth')
+const categoryRoutes = require('./routes/category')
 const orderRoutes = require('./routes/auth')
 const positionRoutes = require('./routes/auth')
 const mongoose = require("mongoose")
@@ -20,6 +21,9 @@ mongoose.connection.on("error", err => {
 mongoose.connection.on("connected", () => {
   console.log("mongoose is connected")
 })
+
+app.use(passport.initialize())
+require('./middleware/passport')(passport)
 
 app.use(require('morgan')('dev'))
 app.use(bodyParser.urlencoded({extended: true}))
