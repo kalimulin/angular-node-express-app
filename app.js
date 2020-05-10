@@ -6,16 +6,20 @@ const analyticsRoutes = require('./routes/auth')
 const categoryRoutes = require('./routes/auth')
 const orderRoutes = require('./routes/auth')
 const positionRoutes = require('./routes/auth')
+const mongoose = require("mongoose")
 
 const app = express()
 
 // connect to DB
-const mongoClient = require('mongodb').MongoClient;
-const mongoose = new mongoClient(require('./config/keys').mongoURI, { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connect(err => {
-  console.log(err)
-  mongoose.close();
-});
+mongoose.connect(require('./config/keys').mongoURI, {
+  useNewUrlParser: true, useUnifiedTopology: true
+})
+mongoose.connection.on("error", err => {
+  console.log("err", err)
+})
+mongoose.connection.on("connected", () => {
+  console.log("mongoose is connected")
+})
 
 app.use(require('morgan')('dev'))
 app.use(bodyParser.urlencoded({extended: true}))
