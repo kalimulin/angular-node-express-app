@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const User = require('../models/User')
+const errorHandler = require('../utils/errorHandler')
 
 module.exports.login = async function (req, res) {
   const candidate = await User.findOne({email: req.body.email}).exec()
@@ -47,7 +48,7 @@ module.exports.register = async function (req, res) {
       })
     } catch (e) {
       console.log(e)
-      res.status(500).json({ message: 'Ошибка сохранения'})
+      errorHandler(res, e)
     }
   }
 }
