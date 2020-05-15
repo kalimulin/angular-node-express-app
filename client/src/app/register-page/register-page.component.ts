@@ -2,7 +2,8 @@ import {Component, OnDestroy, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {Subscription} from "rxjs";
 import {AuthService} from "../shared/services/auth.service";
-import {ActivatedRoute, Params, Router} from "@angular/router";
+import {Router} from "@angular/router";
+import {MaterialService} from "../shared/classes/material.service";
 
 @Component({
   selector: 'app-register-page',
@@ -14,21 +15,13 @@ export class RegisterPageComponent implements OnInit, OnDestroy {
   form: FormGroup
   aSub: Subscription
 
-  constructor(private auth: AuthService, private router: Router, private  route: ActivatedRoute) {
+  constructor(private auth: AuthService, private router: Router) {
   }
 
   ngOnInit(): void {
     this.form = new FormGroup({
       email: new FormControl(null, [Validators.required, Validators.email]),
       password: new FormControl(null, [Validators.required, Validators.minLength(6)])
-    })
-
-    this.route.queryParams.subscribe((params: Params) => {
-      if (params['registered']) {
-        // теперь можно войти в систему
-      } else if (params['accessDenied']) {
-        // сначала авторизуйтесь
-      }
     })
   }
 
@@ -50,6 +43,7 @@ export class RegisterPageComponent implements OnInit, OnDestroy {
       },
       error => {
         console.log(error)
+        MaterialService.toast(error.error.message)
         this.form.enable()
       }
     )
