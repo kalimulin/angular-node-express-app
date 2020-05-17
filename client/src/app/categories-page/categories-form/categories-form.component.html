@@ -12,7 +12,7 @@
 </div>
 
 <div class="row">
-  <form class="col s12 l6" [formGroup]="form" (ngSubmit)="onSubmit">
+  <form class="col s12 l6" [formGroup]="form" (ngSubmit)="onSubmit()">
     <div class="input-field">
       <input
         formControlName="name"
@@ -32,7 +32,15 @@
     </div>
 
     <div>
+      <input
+        type="file"
+        class="d-none"
+        (change)="onFileUpload($event)"
+        #file
+      >
       <button
+        (click)="triggerClick()"
+        [disabled]="form.disabled"
         class="waves-effect waves-light btn orange lighten-2 mb2"
         type="button"
       >
@@ -53,7 +61,13 @@
   </form>
 
   <div class="col s12 l4 center">
-<!--    <img class="responsive-img" style="height: 200px" src="cake.jpg">-->
+    <img
+      class="responsive-img"
+      style="height: 200px"
+      [src]="imagePreview"
+      *ngIf="imagePreview"
+      alt=""
+    >
   </div>
 </div>
 
